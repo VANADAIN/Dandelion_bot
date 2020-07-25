@@ -1,11 +1,12 @@
 
 import config
-import scheduler
+from scheduler import Scheduler
 from aiogram import Bot, Dispatcher, executor, types
 
 COMMANDS_LIST = {
     '!start' : 'Start bot',
-    '!help' : 'Show available commands' 
+    '!help' : 'Show available commands',
+    '!shedule_day' : "Create a day note for your schedule"
     }
 
 bot = Bot(token = config.API_TOKEN)
@@ -23,14 +24,23 @@ async def send_help(message: types.Message):
         line = command + "  -  " + description + "\n " 
         response += line
     await message.answer(f'Available commands: \n\n {response}')
-    
-@dp.message_handler(commands=['schedule'])
+
+# будет создавать расписание с названием и закидывать в БД к текущему юзеру
+#  !!! это нужно сделать 1ым когда разберемся с SQL
+# @dp.message_handler(commands=['schedule'])
+
+@dp.message_handler(commands=['schedule_day'])
 async def create_shedule(message: types.Message):
     
-    ScheduleWelcomeMessage = "Заполните расписание по следующей схеме:\n\nДень недели\nПункт1-время_начала-время_оконачания\nПункт2....\n\nВремя указываем так: 14:00. Расписание указывается на каждый день отдельно!"
+    ScheduleWelcomeMessage = "Fill the schedule with this schema :\n\nDay of the week\nItem_1-begin_time-end_time\nItem_2...\n\nWrite time like this: 14:00. There you create schema for 1 day only!"
     await message.answer(ScheduleWelcomeMessage)
+    @dp.message_handler(lambda message: message.text and message.text.lower() != "")
+    async def create_shedule_day(message: types.Message):
+        
+        # create Scheduler and invoke function
+        sdlr = Scheduler(message.text)
+        sdlr.set_schedule_day()
     
-    # create Scheduler and invoke function
     
     
 @dp.message_handler(commands=['notif'])
