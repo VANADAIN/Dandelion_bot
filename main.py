@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, executor, types
 COMMANDS_LIST = {
     '!start' : 'Start bot',
     '!help' : 'Show available commands',
+    '!schedule' : 'Create schedule',
     '!shedule_day' : "Create a day note for your schedule"
     }
 
@@ -27,26 +28,26 @@ async def send_help(message: types.Message):
 
 # будет создавать расписание с названием и закидывать в БД к текущему юзеру
 #  !!! это нужно сделать 1ым когда разберемся с SQL
-# @dp.message_handler(commands=['schedule'])
+# @dp.message_handler(commands=['schedule'])  # !shedule -> user_message -> message.text -> sdlr.raw_msg -> schedule_name -> name of schedule in database 
 
 @dp.message_handler(commands=['schedule_day'])
-async def create_shedule(message: types.Message):
+async def create_day(message: types.Message):
     
     ScheduleWelcomeMessage = "Fill the schedule with this schema :\n\nDay of the week\nItem_1-begin_time-end_time\nItem_2...\n\nWrite time like this: 14:00. There you create schema for 1 day only!"
     await message.answer(ScheduleWelcomeMessage)
+    
     @dp.message_handler(lambda message: message.text and message.text.lower() != "")
     async def create_shedule_day(message: types.Message):
         
         # create Scheduler and invoke function
-        sdlr = Scheduler(message.text)
+        sdlr = Scheduler(message.text)                  
         sdlr.set_schedule_day()
     
-    
-    
+
 @dp.message_handler(commands=['notif'])
 async def manage_notifier(message: types.Message):
     
     await message.answer('Здесь пока ничего нет :)')    
 
 if __name__ == '__main__':
-    executor.start_polling(dp, skip_updates = config.UPDATE_STATUS) 
+    executor.start_polling(dp, skip_updates = config.SKIP_UPDATE_STATUS) 

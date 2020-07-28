@@ -2,8 +2,6 @@
 # отвечает за создание, перезапись, удаление расписания в БД
 class Scheduler():
     
-    raw_msg = ''
-    
     def __init__(self, msg_txt):
         
         self.raw_msg = msg_txt 
@@ -17,7 +15,7 @@ class Scheduler():
         
         day_dict = {"day" : {
             
-                     "name" : parsed_str[0].strip(),
+                     "name" : parsed_str[0].strip(), # tuesday
                      "day_items" : {
                            
                            # "item_1" : {
@@ -58,9 +56,8 @@ class Scheduler():
         pass
     
     def rewrite_schedule_day():
-    # перезаписать день -> вызывается после check_schedule
+    # перезаписать день -> вызывается после check_schedule и меняет raw_msg
     # если что-то указано неправильно или в случае когда поменялись пункты/время 
-     
         pass
     
     def delete_shedule_day():
