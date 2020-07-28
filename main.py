@@ -1,4 +1,4 @@
-
+# comment for checking git
 import config
 from scheduler import Scheduler
 from aiogram import Bot, Dispatcher, executor, types
