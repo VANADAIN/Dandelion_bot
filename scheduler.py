@@ -1,4 +1,21 @@
 
+import sqlite3
+
+class Database():
+    
+    def __init__(self):
+        
+        self.db = sqlite3.connect('users.db')
+        # cursor
+        self.c = self.db.cursor()
+        
+        def init_table(self):
+            
+            self.c.execute("""CREATE TABLE Users (
+                user_id text,
+                user_num_schedules integer
+                )""")
+
 # отвечает за создание, перезапись, удаление расписания в БД
 class Scheduler():
     
