@@ -1,20 +1,28 @@
 
 import sqlite3
 
+# sqlite database
 class Database():
     
     def __init__(self):
         
         self.db = sqlite3.connect('users.db')
+        
         # cursor
         self.c = self.db.cursor()
         
         def init_table(self):
             
+            # add schedule pointers if another table
             self.c.execute("""CREATE TABLE Users (
                 user_id text,
                 user_num_schedules integer
                 )""")
+            self.db.commit()
+            
+        def close_connection(self):
+            
+            self.db.close()
 
 # отвечает за создание, перезапись, удаление расписания в БД
 class Scheduler():
@@ -23,8 +31,8 @@ class Scheduler():
         
         self.raw_msg = msg_txt 
     
-    def set_schedule(self, shedule_name):
-        pass
+    def set_schedule(self):
+        name = self.raw_msg
     
     def set_schedule_day(self):
     # парсим и записываем параметры расписания

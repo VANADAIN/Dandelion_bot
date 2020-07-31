@@ -1,4 +1,4 @@
-# comment for checking git
+
 import config
 from scheduler import Scheduler
 from aiogram import Bot, Dispatcher, executor, types
@@ -13,7 +13,7 @@ COMMANDS_LIST = {
 bot = Bot(token = config.API_TOKEN)
 dp = Dispatcher(bot)
 
-# --- Можно сделать все комманды в отдельном файле ---
+
 @dp.message_handler(commands=['start'])
 async def send_welcome(message: types.Message):
     await message.answer("Hi !\nI'm Dandelion_bot !\n Run /help to see available commands !")
@@ -26,9 +26,18 @@ async def send_help(message: types.Message):
         response += line
     await message.answer(f'Available commands: \n\n {response}')
 
-# будет создавать расписание с названием и закидывать в БД к текущему юзеру
-#  !!! это нужно сделать 1ым когда разберемся с SQL
-# @dp.message_handler(commands=['schedule'])  # !shedule -> user_message -> message.text -> sdlr.raw_msg -> schedule_name -> name of schedule in database 
+
+@dp.message_handler(commands=['schedule'])  
+async def create_name(message: types.Message):
+
+    ScheduleNameMessage = "Print the name of your schedule."
+    await message.answer(ScheduleNameMessage)
+    
+    @dp.message_handler(lambda message: message.text and message.text.lower() != "")
+    async def create_shedule(message: types.Message):
+        
+        sdlr_name = Scheduler(message.text)                  
+        sdlr.set_schedule() 
 
 @dp.message_handler(commands=['schedule_day'])
 async def create_day(message: types.Message):
