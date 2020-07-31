@@ -5,24 +5,28 @@ import sqlite3
 class Database():
     
     def __init__(self):
+        pass
         
-        self.db = sqlite3.connect('users.db')
+    def init_table(self):
         
-        # cursor
-        self.c = self.db.cursor()
+        # add schedule pointers if another table
+
+        db = sqlite3.connect('users.db')
         
-        def init_table(self):
+        cursor = db.cursor()
+
+        cursor.execute("""CREATE TABLE Users (
+            user_id     text,
+            sched_name  text,
+            day         text,
+            B_time_H    int,
+            B_time_M    int,
+            E_time_H    int,
+            E_time_M    int
+            )""")
+        db.commit()
+        db.close()
             
-            # add schedule pointers if another table
-            self.c.execute("""CREATE TABLE Users (
-                user_id text,
-                user_num_schedules integer
-                )""")
-            self.db.commit()
-            
-        def close_connection(self):
-            
-            self.db.close()
 
 # отвечает за создание, перезапись, удаление расписания в БД
 class Scheduler():
