@@ -35,6 +35,10 @@ class Scheduler():
         
         self.raw_msg = msg_txt 
     
+    def get_user_id(self, id):
+        
+        sefl.user_id = id
+        
     def set_schedule(self):
         name = self.raw_msg
     

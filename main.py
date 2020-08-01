@@ -36,7 +36,8 @@ async def create_name(message: types.Message):
     @dp.message_handler(lambda message: message.text and message.text.lower() != "")
     async def create_shedule(message: types.Message):
         
-        sdlr_name = Scheduler(message.text)                  
+        sdlr = Scheduler(message.text) 
+        sdlr.get_user_id(message.from_user.id)
         sdlr.set_schedule() 
 
 @dp.message_handler(commands=['schedule_day'])
