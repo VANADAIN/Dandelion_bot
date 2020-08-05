@@ -1,33 +1,36 @@
 
 import sqlite3
 
-# sqlite database
 class Database():
-    
     def __init__(self):
         pass
+    
+    # use as decorator
+    # opens db connection -> returns result of a callable function -> closes connection
+    def ensure_connection(function):
         
-    def init_table(self):
-        
-        # add schedule pointers if another table
-
-        db = sqlite3.connect('users.db')
-        
-        cursor = db.cursor()
-
-        cursor.execute("""CREATE TABLE Users (
-            user_id     text,
-            sched_name  text,
-            day         text,
-            B_time_H    int,
-            B_time_M    int,
-            E_time_H    int,
-            E_time_M    int
-            )""")
-        db.commit()
-        db.close()
+        def inner(*args, **kwargs):
             
+            with sqlite3.connect('users.db') as connection:
+                res = function(conn = connection, c = connection.cursor(), *args, **kwargs)
+            return res
+        
+        return inner
+    
+    @ensure_connection
+    def init_table(self, conn, c):
 
+        c.execute("""CREATE TABLE IF NOT EXISTS users (
+                user_id     text,
+                sched_name  text,
+                day         text,
+                B_time_H    int,
+                B_time_M    int,
+                E_time_H    int,
+                E_time_M    int
+            )""")
+        conn.commit()
+        
 # отвечает за создание, перезапись, удаление расписания в БД
 class Scheduler():
     
