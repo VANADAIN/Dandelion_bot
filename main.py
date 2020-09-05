@@ -1,7 +1,10 @@
 
-import config
+import settings
 import time
 import threading
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
 from scheduler import Scheduler
 from notifier import Notifier
 from aiogram import Bot, Dispatcher, executor, types
@@ -13,7 +16,12 @@ COMMANDS_LIST = {
     '!shedule_day': "Create a day note for your schedule"
 }
 
-bot = Bot(token=config.API_TOKEN)
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+API_TOKEN = os.environ.get("SECRET_KEY")
+
+bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
 
 
@@ -69,7 +77,7 @@ def send():
 def main():
     t = threading.Thread(target=send, name="тест")
     t.start()
-    executor.start_polling(dp, skip_updates=config.SKIP_UPDATE_STATUS)
+    executor.start_polling(dp, skip_updates=settings.SKIP_UPDATE_STATUS)
 
 
 if __name__ == '__main__':
