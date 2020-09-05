@@ -54,15 +54,22 @@ class Scheduler():
             })
         return day_dict
 
-    def write_schedule_day(self, day_info, id):
+    async def write_schedule_day(self, day_info, id):
 
         for i in day_info['day']['day_items']:
             val = [k for k in day_info['day']['day_items'][i].values()]
+
+            checkpoint_min = int(val[1]) - 10
+            checkpoint_h = int(val[0])
+            if checkpoint_min < 0:
+                checkpoint_min = 60 - checkpoint_min
+                checkpoint_h = checkpoint_h - 1
+
             arr = [id, day_info['day']['sched_name'], day_info['day']['name'], i, val[0],
-                   val[1], val[1], val[1]-10, val[2], val[3]]
-            print(f'VALUES: {val}')
+                   val[1], checkpoint_h, checkpoint_min, val[2], val[3]]
+
             db = Database()
-            db.write_info(insert=arr)
+            await db.write_info(insert=arr)
 
     def rewrite_schedule_day(self):
         pass

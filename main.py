@@ -1,5 +1,7 @@
 
 import config
+import time
+import threading
 from scheduler import Scheduler
 from notifier import Notifier
 from aiogram import Bot, Dispatcher, executor, types
@@ -42,17 +44,33 @@ async def welcome_schedule(message: types.Message):
         user_id = sdlr.get_user_id(message.from_user.id)
 
         dictionary = sdlr.set_schedule_day()  # get day dict
-        sdlr.write_schedule_day(day_info=dictionary, id=user_id)
+        await sdlr.write_schedule_day(day_info=dictionary, id=user_id)
 
 
-@dp.message_handler(commands=['notif'])
+@dp.message_handler(commands=['notif_switch'])
 async def manage_notifier(message: types.Message):
     notif = Notifier()
-    code, msg = notif.switch_activity()
-    if code == 1:
-      # start sending notifications
-        pass
+    msg = notif.switch_activity()
     await message.answer(msg)
 
-if __name__ == '__main__':
+
+def send():
+    n = Notifier()
+    while True:
+        time.sleep(60)
+        msg = n.send_notification()
+        print("working...")
+        if msg == False:
+            pass
+        else:
+            bot.send_message(chat_id=msg[0], text=msg[1])
+
+
+def main():
+    t = threading.Thread(target=send, name="тест")
+    t.start()
     executor.start_polling(dp, skip_updates=config.SKIP_UPDATE_STATUS)
+
+
+if __name__ == '__main__':
+    main()
