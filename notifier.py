@@ -61,24 +61,24 @@ class Notifier():
                 E_time_M = line[6]
                 number = self.get_week_num()
                 msg = (
-                    user, f"Num:{number}\n{name}\n{note}\n{B_time_H}:{B_time_M}-{E_time_H}:{E_time_M}")
+                    user, f"Week:{number}\n{name}\n{note}\n{B_time_H}:{B_time_M}-{E_time_H}:{E_time_M}")
 
-                # check this because int destroys 0 in minute
+                # check this because destroys 0 in minute
                 if B_time_M < 10 and E_time_M < 10:
                     B_time_M = [0, B_time_M]
                     E_time_M = [0, E_time_M]
                     msg = (
-                        user, f"Num: {number}\n{name}\n{note}\n{B_time_H}:{B_time_M[0]}{B_time_M[1]}-{E_time_H}:{E_time_M[0]}{E_time_M[1]}")
+                        user, f"Week: {number}\n{name}\n{note}\n{B_time_H}:{B_time_M[0]}{B_time_M[1]}-{E_time_H}:{E_time_M[0]}{E_time_M[1]}")
 
                 elif B_time_M < 10:
                     B_time_M = [0, B_time_M]
                     msg = (
-                        user, f"Num: {number}\n{name}\n{note}\n{B_time_H}:{B_time_M[0]}{B_time_M[1]}-{E_time_H}:{E_time_M}")
+                        user, f"Week: {number}\n{name}\n{note}\n{B_time_H}:{B_time_M[0]}{B_time_M[1]}-{E_time_H}:{E_time_M}")
 
                 elif E_time_M < 10:
                     E_time_M = [0, E_time_M]
                     msg = (
-                        user, f"Num: {number}\n{name}\n{note}\n{B_time_H}:{B_time_M}-{E_time_H}:{E_time_M[0]}{E_time_M[1]}")
+                        user, f"Week: {number}\n{name}\n{note}\n{B_time_H}:{B_time_M}-{E_time_H}:{E_time_M[0]}{E_time_M[1]}")
 
             return msg
 

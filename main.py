@@ -66,26 +66,24 @@ async def manage_notifier(message: types.Message):
 
 async def send():
     n = Notifier()
-    while True:
-        time.sleep(30)
-        print("working 111...")
-        msg = n.send_notification()
-        print("working 222...")
-        print(f"msg ::: {msg}")
-        if msg == False:
-            pass
-        else:
-            print('TO TELEGRAM')
-            print(f'sending to id={msg[0]} with text: {msg[1]} ')
-            await bot.send_message(chat_id=int(msg[0]), text=msg[1])
+    print("working 111...")
+    msg = n.send_notification()
+    print("working 222...")
+    print(f"msg ::: {msg}")
+    if msg == False:
+        pass
+    else:
+        print('TO TELEGRAM')
+        print(f'sending to id={msg[0]} with text: {msg[1]} ')
+        await bot.send_message(chat_id=int(msg[0]), text=msg[1])
 
 
 def repeat(coro, loop):
     asyncio.ensure_future(coro(), loop=loop)
-    loop.call_later(10, repeat, coro, loop)
+    loop.call_later(60, repeat, coro, loop)
 
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.call_later(30, repeat, send, loop)
+    loop.call_later(60, repeat, send, loop)
     executor.start_polling(dp, skip_updates=settings.SKIP_UPDATE_STATUS)

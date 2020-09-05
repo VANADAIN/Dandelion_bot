@@ -63,8 +63,10 @@ class Scheduler():
             checkpoint_h = int(val[0])
             if checkpoint_min < 0:
                 checkpoint_min = 60 + checkpoint_min
-                checkpoint_h = checkpoint_h - 1
-
+                if checkpoint_h != 0:
+                    checkpoint_h = checkpoint_h - 1
+                else:
+                    checkpoint_h = 23
             arr = [id, day_info['day']['sched_name'], day_info['day']['name'], i, val[0],
                    val[1], checkpoint_h, checkpoint_min, val[2], val[3]]
 
