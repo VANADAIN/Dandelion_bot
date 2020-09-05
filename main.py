@@ -1,6 +1,7 @@
 
 import config
 from scheduler import Scheduler
+from notifier import Notifier
 from aiogram import Bot, Dispatcher, executor, types
 
 COMMANDS_LIST = {
@@ -46,8 +47,12 @@ async def welcome_schedule(message: types.Message):
 
 @dp.message_handler(commands=['notif'])
 async def manage_notifier(message: types.Message):
-
-    await message.answer('Здесь пока ничего нет :)')
+    notif = Notifier()
+    code, msg = notif.switch_activity()
+    if code == 1:
+      # start sending notifications
+        pass
+    await message.answer(msg)
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=config.SKIP_UPDATE_STATUS)

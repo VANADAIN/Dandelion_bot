@@ -1,36 +1,7 @@
 
-import sqlite3
-
-
-class Database():
-    def __init__(self):
-        pass
-
-    def init_table(self):
-        with sqlite3.connect('users.db') as conn:
-            c = conn.cursor()
-            c.execute("""CREATE TABLE IF NOT EXISTS users (
-                    user_id     text,
-                    sched_name  text,
-                    day         text,
-                    note        text,
-                    B_time_H    int,
-                    B_time_M    int,
-                    E_time_H    int,
-                    E_time_M    int
-                )""")
-            conn.commit()
-
-    def write_info(self, insert):
-        print(insert)
-        with sqlite3.connect('users.db') as conn:
-            c = conn.cursor()
-            c.execute(
-                'INSERT INTO users (user_id, sched_name, day, note, B_time_H, B_time_M, E_time_H, E_time_M) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                (insert[0], insert[1], insert[2], insert[3], insert[4], insert[5], insert[6], insert[7]))
-
-
+from database import Database
 # отвечает за создание, перезапись, удаление расписания в БД
+
 
 class Scheduler():
 
@@ -88,7 +59,7 @@ class Scheduler():
         for i in day_info['day']['day_items']:
             val = [k for k in day_info['day']['day_items'][i].values()]
             arr = [id, day_info['day']['sched_name'], day_info['day']['name'], i, val[0],
-                   val[1], val[2], val[3]]
+                   val[1], val[1], val[1]-10, val[2], val[3]]
             print(f'VALUES: {val}')
             db = Database()
             db.write_info(insert=arr)
