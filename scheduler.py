@@ -39,10 +39,10 @@ class Scheduler():
             bt = words[1].strip().split(":")
             et = words[2].strip().split(":")
 
-            bth = bt[0]
-            btm = bt[1]
-            eth = et[0]
-            etm = et[1]
+            bth = int(bt[0])
+            btm = int(bt[1])
+            eth = int(et[0])
+            etm = int(et[1])
 
             day_dict["day"]["day_items"].update({
                 words[0].strip(): {
@@ -62,7 +62,7 @@ class Scheduler():
             checkpoint_min = int(val[1]) - 10
             checkpoint_h = int(val[0])
             if checkpoint_min < 0:
-                checkpoint_min = 60 - checkpoint_min
+                checkpoint_min = 60 + checkpoint_min
                 checkpoint_h = checkpoint_h - 1
 
             arr = [id, day_info['day']['sched_name'], day_info['day']['name'], i, val[0],

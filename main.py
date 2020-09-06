@@ -1,7 +1,9 @@
 
 import settings
 import time
+import asyncio
 import threading
+import schedule
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -19,7 +21,7 @@ COMMANDS_LIST = {
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-API_TOKEN = os.environ.get("SECRET_KEY")
+API_TOKEN = os.environ.get("API_TOKEN")
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
@@ -49,7 +51,7 @@ async def welcome_schedule(message: types.Message):
     async def create_shedule_day(message: types.Message):
 
         sdlr = Scheduler(message.text)
-        user_id = sdlr.get_user_id(message.from_user.id)
+        user_id = sdlr.get_user_id(message.chat.id)
 
         dictionary = sdlr.set_schedule_day()  # get day dict
         await sdlr.write_schedule_day(day_info=dictionary, id=user_id)
@@ -62,23 +64,28 @@ async def manage_notifier(message: types.Message):
     await message.answer(msg)
 
 
-def send():
+async def send():
     n = Notifier()
     while True:
-        time.sleep(60)
+        time.sleep(30)
+        print("working 111...")
         msg = n.send_notification()
-        print("working...")
+        print("working 222...")
+        print(f"msg ::: {msg}")
         if msg == False:
             pass
         else:
-            bot.send_message(chat_id=msg[0], text=msg[1])
+            print('TO TELEGRAM')
+            print(f'sending to id={msg[0]} with text: {msg[1]} ')
+            await bot.send_message(chat_id=int(msg[0]), text=msg[1])
 
 
-def main():
-    t = threading.Thread(target=send, name="тест")
-    t.start()
-    executor.start_polling(dp, skip_updates=settings.SKIP_UPDATE_STATUS)
+def repeat(coro, loop):
+    asyncio.ensure_future(coro(), loop=loop)
+    loop.call_later(10, repeat, coro, loop)
 
 
 if __name__ == '__main__':
-    main()
+    loop = asyncio.get_event_loop()
+    loop.call_later(30, repeat, send, loop)
+    executor.start_polling(dp, skip_updates=settings.SKIP_UPDATE_STATUS)

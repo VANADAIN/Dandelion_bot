@@ -30,13 +30,15 @@ class Database():
                 (insert[0], insert[1], insert[2], insert[3], insert[4], insert[5], insert[6], insert[7], insert[8], insert[9]))
             conn.commit()
 
-    async def create_response(self, day, hour, minute):
+    def create_response(self, day, hour, minute):
+        print('Connecting to database')
         with sqlite3.connect('users.db') as conn:
             c = conn.cursor()
             # use current datetime to return all values with checkpoint to notificator
             c.execute(
                 "SELECT user_id, sched_name, note, B_time_H, B_time_M, E_time_H, E_time_M FROM users WHERE day=? AND checkpoint_H=? AND Checkpoint_M=?", (day, hour, minute))
             data = c.fetchall()
+            print("data collected")
         return data
 
     def check_data(self):
